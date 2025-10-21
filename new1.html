@@ -1,0 +1,2525 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindSync - AI Mental Wellness Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4F46E5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MindSync">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary: #EC4899;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --light: #F8FAFC;
+            --gray: #6B7280;
+            --background: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --meditation: #8B5CF6;
+            --focus: #06B6D4;
+            --stress: #F97316;
+        }
+
+        [data-theme="dark"] {
+            --background: #0F172A;
+            --card-bg: #1E293B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --dark: #F1F5F9;
+            --light: #1E293B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+            padding: 0;
+            margin: 0;
+        }
+
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        /* App Header */
+        .app-header {
+            background: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .icon-button:active {
+            background: rgba(0,0,0,0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 1.75rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Enhanced Camera Styles */
+        .camera-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            height: 320px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, var(--light) 0%, var(--card-bg) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .camera-container.active {
+            border-color: var(--success);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .camera-frame {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        #videoElement {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            transform: scaleX(-1); /* Mirror the video for a more natural feel */
+        }
+
+        .camera-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        .camera-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .camera-status {
+            position: absolute;
+            bottom: 16px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 0 auto;
+            width: fit-content;
+            backdrop-filter: blur(10px);
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .camera-container:hover .camera-overlay {
+            opacity: 1;
+        }
+
+        .camera-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .action-button:active {
+            transform: scale(0.98);
+        }
+
+        .action-button.secondary {
+            background: var(--light);
+            color: var(--text-primary);
+        }
+
+        .action-button.danger {
+            background: var(--danger);
+        }
+
+        .action-button.success {
+            background: var(--success);
+        }
+
+        .action-button.meditation {
+            background: var(--meditation);
+        }
+
+        .action-button.focus {
+            background: var(--focus);
+        }
+
+        .action-button.stress {
+            background: var(--stress);
+        }
+
+        .control-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .control-button:active {
+            transform: scale(0.95);
+        }
+
+        .control-button.secondary {
+            background: var(--light);
+            color: var(--text-primary);
+        }
+
+        .control-button.danger {
+            background: var(--danger);
+        }
+
+        .control-button.success {
+            background: var(--success);
+        }
+
+        .emotion-result {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            background: var(--light);
+        }
+
+        .emotion-indicator {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .emotion-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--light);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: var(--primary);
+            transition: width 0.5s ease;
+        }
+
+        .confidence-meter {
+            width: 100%;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .meter-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .meter-bar {
+            height: 8px;
+            background: var(--light);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--danger) 0%, var(--warning) 50%, var(--success) 100%);
+            transition: width 0.5s ease;
+        }
+
+        .analysis-indicator {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 3;
+            backdrop-filter: blur(10px);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .google-vision-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--light);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin: 12px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--light);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .stress-fill { background: var(--stress); }
+        .focus-fill { background: var(--focus); }
+        .energy-fill { background: var(--warning); }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:active {
+            transform: scale(0.95);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Section Styling */
+        .section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Analysis History */
+        .history-list {
+            margin-top: 16px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-emotion {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .emotion-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .history-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .stat-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Meditation Section */
+        .meditation-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .meditation-visual {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--meditation) 0%, #7C3AED 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .breathing-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            position: absolute;
+            animation: breathe 8s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .meditation-timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .meditation-controls {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .meditation-controls .action-button {
+            flex: 1;
+        }
+
+        .meditation-sessions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .session-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .session-card:active {
+            transform: scale(0.95);
+        }
+
+        .session-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 1.2rem;
+            background: var(--meditation);
+            color: white;
+        }
+
+        .session-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .session-duration {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Focus Section */
+        .focus-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .focus-timer {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--focus);
+            text-align: center;
+        }
+
+        .focus-mode-selector {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .focus-mode {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .focus-mode.active {
+            background: var(--focus);
+            color: white;
+        }
+
+        .focus-mode:active {
+            transform: scale(0.95);
+        }
+
+        .focus-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .focus-stat {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .focus-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--focus);
+            margin-bottom: 4px;
+        }
+
+        .focus-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Stress Management Section */
+        .stress-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stress-level-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .stress-meter {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--success) 0% 25%,
+                var(--warning) 25% 75%,
+                var(--danger) 75% 100%
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .stress-meter-inner {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .stress-interventions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .intervention-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .intervention-card:active {
+            transform: scale(0.95);
+        }
+
+        .intervention-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 1.2rem;
+            background: var(--stress);
+            color: white;
+        }
+
+        .intervention-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .intervention-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* AI Control Panel */
+        .ai-control-panel {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .ai-control-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .ai-control-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .ai-control-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .ai-control-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ai-recommendation {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .ai-recommendation.high-stress {
+            border-left-color: var(--danger);
+        }
+
+        .ai-recommendation.meditation {
+            border-left-color: var(--meditation);
+        }
+
+        .ai-recommendation.focus {
+            border-left-color: var(--focus);
+        }
+
+        .recommendation-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recommendation-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            flex: 1;
+            max-width: 80px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item:active {
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal h2 {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1500;
+            max-width: 90%;
+            animation: fadeIn 0.3s ease-out;
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .notification-toast.success {
+            border-left-color: var(--success);
+        }
+
+        .notification-toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification-toast.warning {
+            border-left-color: var(--warning);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Hide scrollbars for better mobile experience */
+        .history-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-brain-circuit"></i>
+                <span>MindSync</span>
+            </div>
+            <div class="header-actions">
+                <button class="icon-button" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="icon-button" id="installButton" style="display: none;">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>AI Mental Wellness</h1>
+            <p>Real-time emotion detection, meditation, and stress management</p>
+            <button class="cta-button" id="getStartedBtn">Start Analysis</button>
+        </section>
+
+        <!-- Dashboard -->
+        <section class="dashboard">
+            <!-- Emotion Detection Card -->
+            <div class="card emotion-detection">
+                <div class="card-header">
+                    <div class="card-title">Live Emotion Analysis</div>
+                    <div class="card-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                
+                <div class="camera-section">
+                    <div class="camera-container" id="cameraContainer">
+                        <div class="camera-frame"></div>
+                        <div class="camera-placeholder" id="cameraPlaceholder">
+                            <i class="fas fa-user-circle"></i>
+                            <p>Camera Ready</p>
+                            <div class="google-vision-badge">
+                                <i class="fas fa-robot"></i>
+                                AI Emotion Detection
+                            </div>
+                        </div>
+                        <video id="videoElement" autoplay playsinline muted class="hidden"></video>
+                        <div class="analysis-indicator" id="analysisIndicator" style="display: none;">
+                            <div class="pulse-dot"></div>
+                            Analyzing...
+                        </div>
+                        <div class="camera-overlay">
+                            <div class="camera-status" id="cameraStatus">Ready</div>
+                        </div>
+                    </div>
+                    
+                    <div class="camera-controls">
+                        <button class="control-button success" id="enableCameraBtn">
+                            <i class="fas fa-camera"></i>
+                            <span id="enableCameraText">Start Camera</span>
+                        </button>
+                        
+                        <button class="control-button secondary" id="simulateEmotionBtn">
+                            <i class="fas fa-brain"></i>
+                            Simulate Emotion
+                        </button>
+                    </div>
+                    
+                    <div class="emotion-result" id="emotionResult">
+                        <div class="emotion-indicator" id="emotionIndicator" style="background: var(--success);">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div class="emotion-text" id="emotionText">Ready for Analysis</div>
+                            <div class="confidence-meter">
+                                <div class="meter-labels">
+                                    <span>0%</span>
+                                    <span>Confidence</span>
+                                    <span>100%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-fill" id="confidenceBar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 16px; text-align: center; font-size: 0.8rem; color: var(--text-secondary);">
+                    <i class="fas fa-shield-alt"></i> Your privacy is protected - All processing happens locally
+                </div>
+            </div>
+
+            <!-- Mental State Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Mental State Analysis</div>
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Stress Level</span>
+                        <span id="stressValue">--%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill stress-fill" id="stressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Focus Level</span>
+                        <span id="focusValue">--%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill focus-fill" id="focusBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Energy Level</span>
+                        <span id="energyValue">--%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill energy-fill" id="energyBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <button class="action-button secondary" id="saveMetricsBtn">
+                    <i class="fas fa-save"></i> Save Current Analysis
+                </button>
+            </div>
+        </section>
+
+        <!-- AI Control Panel -->
+        <section class="ai-control-panel">
+            <div class="ai-control-header">
+                <div class="ai-control-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="ai-control-title">AI Wellness Recommendations</div>
+            </div>
+            <div class="ai-control-content" id="aiRecommendations">
+                <div class="ai-recommendation">
+                    <div class="recommendation-title">
+                        <i class="fas fa-info-circle"></i>
+                        Start Analysis
+                    </div>
+                    <div class="recommendation-desc">
+                        Enable camera or use simulate emotion to get personalized wellness recommendations
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="features-grid">
+            <div class="feature-card" id="meditationFeature">
+                <div class="feature-icon" style="background: var(--meditation);">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div class="feature-title">Meditation</div>
+                <div class="feature-description">Guided sessions</div>
+            </div>
+
+            <div class="feature-card" id="focusFeature">
+                <div class="feature-icon" style="background: var(--focus);">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <div class="feature-title">Focus</div>
+                <div class="feature-description">Pomodoro timer</div>
+            </div>
+
+            <div class="feature-card" id="stressFeature">
+                <div class="feature-icon" style="background: var(--stress);">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="feature-title">Stress Relief</div>
+                <div class="feature-description">Manage anxiety</div>
+            </div>
+
+            <div class="feature-card" id="historyFeature">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="feature-title">Analytics</div>
+                <div class="feature-description">View trends</div>
+            </div>
+        </section>
+
+        <!-- Meditation Section -->
+        <section class="section" id="meditationSection">
+            <h2 class="section-title">Guided Meditation</h2>
+            <p class="section-subtitle">Reduce stress and improve mental clarity</p>
+
+            <div class="meditation-container">
+                <div class="meditation-visual">
+                    <div class="breathing-circle"></div>
+                    <div class="meditation-timer" id="meditationTimer">05:00</div>
+                </div>
+                
+                <div class="meditation-controls">
+                    <button class="action-button meditation" id="startMeditationBtn">
+                        <i class="fas fa-play"></i> Start Session
+                    </button>
+                    <button class="action-button secondary" id="stopMeditationBtn" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+
+                <div class="meditation-sessions">
+                    <div class="session-card" data-duration="300">
+                        <div class="session-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="session-title">Quick Calm</div>
+                        <div class="session-duration">5 min</div>
+                    </div>
+                    <div class="session-card" data-duration="600">
+                        <div class="session-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="session-title">Mindfulness</div>
+                        <div class="session-duration">10 min</div>
+                    </div>
+                    <div class="session-card" data-duration="900">
+                        <div class="session-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div class="session-title">Deep Relax</div>
+                        <div class="session-duration">15 min</div>
+                    </div>
+                    <div class="session-card" data-duration="1200">
+                        <div class="session-icon">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div class="session-title">Stress Relief</div>
+                        <div class="session-duration">20 min</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Focus Section -->
+        <section class="section" id="focusSection">
+            <h2 class="section-title">Focus Timer</h2>
+            <p class="section-subtitle">Boost productivity with AI-powered focus sessions</p>
+
+            <div class="focus-container">
+                <div class="focus-timer" id="focusTimer">25:00</div>
+                
+                <div class="focus-mode-selector">
+                    <div class="focus-mode active" data-duration="1500">
+                        Focus
+                    </div>
+                    <div class="focus-mode" data-duration="300">
+                        Short Break
+                    </div>
+                    <div class="focus-mode" data-duration="900">
+                        Long Break
+                    </div>
+                </div>
+
+                <div class="focus-controls">
+                    <button class="action-button focus" id="startFocusBtn">
+                        <i class="fas fa-play"></i> Start Focus
+                    </button>
+                    <button class="action-button secondary" id="stopFocusBtn" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+
+                <div class="focus-stats">
+                    <div class="focus-stat">
+                        <div class="focus-value" id="focusSessions">0</div>
+                        <div class="focus-label">Sessions</div>
+                    </div>
+                    <div class="focus-stat">
+                        <div class="focus-value" id="focusTime">0h</div>
+                        <div class="focus-label">Total Time</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stress Management Section -->
+        <section class="section" id="stressSection">
+            <h2 class="section-title">Stress Management</h2>
+            <p class="section-subtitle">Real-time interventions based on your stress level</p>
+
+            <div class="stress-container">
+                <div class="stress-level-indicator">
+                    <div class="stress-meter">
+                        <div class="stress-meter-inner" id="stressLevel">--</div>
+                    </div>
+                    <div>
+                        <h3>Current Stress Level</h3>
+                        <p id="stressDescription">Enable emotion analysis to see your stress level</p>
+                    </div>
+                </div>
+
+                <div class="stress-interventions">
+                    <div class="intervention-card" id="breathingExercise">
+                        <div class="intervention-icon">
+                            <i class="fas fa-lungs"></i>
+                        </div>
+                        <div class="intervention-title">Breathing</div>
+                        <div class="intervention-desc">4-7-8 technique</div>
+                    </div>
+                    <div class="intervention-card" id="quickMeditation">
+                        <div class="intervention-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <div class="intervention-title">Quick Meditation</div>
+                        <div class="intervention-desc">3-min session</div>
+                    </div>
+                    <div class="intervention-card" id="groundingExercise">
+                        <div class="intervention-icon">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <div class="intervention-title">Grounding</div>
+                        <div class="intervention-desc">5-4-3-2-1 method</div>
+                    </div>
+                    <div class="intervention-card" id="progressiveRelaxation">
+                        <div class="intervention-icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <div class="intervention-title">Body Scan</div>
+                        <div class="intervention-desc">Progressive relaxation</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis History Section -->
+        <section class="section" id="historySection">
+            <h2 class="section-title">Recent Analysis</h2>
+            <p class="section-subtitle">Your emotion history from recent sessions</p>
+
+            <div class="history-list" id="historyList">
+                <!-- History items will be added here -->
+            </div>
+            
+            <button class="action-button secondary" id="clearHistoryBtn" style="margin-top: 16px;">
+                <i class="fas fa-trash"></i> Clear History
+            </button>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-section="dashboard">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" data-section="meditation">
+            <i class="fas fa-spa nav-icon"></i>
+            <span class="nav-label">Meditation</span>
+        </button>
+        <button class="nav-item" data-section="focus">
+            <i class="fas fa-bullseye nav-icon"></i>
+            <span class="nav-label">Focus</span>
+        </button>
+        <button class="nav-item" data-section="stress">
+            <i class="fas fa-heartbeat nav-icon"></i>
+            <span class="nav-label">Stress</span>
+        </button>
+    </nav>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2>Welcome to MindSync</h2>
+            <p>AI-powered mental wellness with real-time emotion detection</p>
+            <button class="action-button" id="demoLoginBtn" style="width: 100%;">
+                <i class="fas fa-play"></i> Start Analysis
+            </button>
+            <div style="margin-top: 16px; text-align: center;">
+                <small style="color: var(--text-secondary);">
+                    <i class="fas fa-database"></i> Data stored locally in your browser
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Backend URL
+        const BACKEND_URL = 'https://mindsync-backend-4lrk.onrender.com';
+
+        // Emotion Service with Backend Integration
+        const emotionService = {
+            async analyzeEmotion(imageData) {
+                try {
+                    const response = await fetch(`${BACKEND_URL}/api/emotion/analyze`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            imageData: imageData, // Base64 image data
+                            sessionId: currentSessionId
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Map backend response to frontend format
+                        return this.mapBackendResponse(result.data);
+                    } else {
+                        throw new Error(result.error || 'Unknown error from backend');
+                    }
+                } catch (error) {
+                    console.error('API analysis failed, using mock:', error);
+                    // Fallback to mock analysis
+                    return this.mockAnalyzeEmotion();
+                }
+            },
+
+            mapBackendResponse(backendData) {
+                // Map backend emotion data to frontend format
+                const emotionMap = {
+                    'joy': { emotion: 'JOY', color: 'var(--warning)', icon: 'fa-laugh-beam', text: 'Happy & Joyful' },
+                    'calm': { emotion: 'CALM', color: 'var(--success)', icon: 'fa-smile', text: 'Calm & Relaxed' },
+                    'surprise': { emotion: 'SURPRISE', color: 'var(--primary)', icon: 'fa-surprise', text: 'Surprised' },
+                    'confusion': { emotion: 'CONFUSED', color: 'var(--gray)', icon: 'fa-meh-rolling-eyes', text: 'Confused' },
+                    'sadness': { emotion: 'SADNESS', color: 'var(--gray)', icon: 'fa-frown', text: 'Feeling Sad' },
+                    'anger': { emotion: 'ANGER', color: 'var(--danger)', icon: 'fa-angry', text: 'Angry' }
+                };
+                
+                const detectedEmotion = backendData.emotion?.toLowerCase() || 'calm';
+                const config = emotionMap[detectedEmotion] || emotionMap.calm;
+                
+                return {
+                    emotion: config.emotion,
+                    confidence: backendData.confidence || 0.75,
+                    color: config.color,
+                    icon: config.icon,
+                    text: config.text,
+                    timestamp: new Date().toISOString()
+                };
+            },
+
+            mockAnalyzeEmotion() {
+                // Your existing mock analysis code
+                const emotions = [
+                    { emotion: 'JOY', confidence: 0.85, color: 'var(--warning)', icon: 'fa-laugh-beam', text: 'Happy & Joyful' },
+                    { emotion: 'CALM', confidence: 0.78, color: 'var(--success)', icon: 'fa-smile', text: 'Calm & Relaxed' },
+                    { emotion: 'SURPRISE', confidence: 0.72, color: 'var(--primary)', icon: 'fa-surprise', text: 'Surprised' },
+                    { emotion: 'CONFUSED', confidence: 0.65, color: 'var(--gray)', icon: 'fa-meh-rolling-eyes', text: 'Confused' },
+                    { emotion: 'SADNESS', confidence: 0.58, color: 'var(--gray)', icon: 'fa-frown', text: 'Feeling Sad' },
+                    { emotion: 'ANGER', confidence: 0.45, color: 'var(--danger)', icon: 'fa-angry', text: 'Angry' }
+                ];
+                
+                const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+                return {
+                    ...randomEmotion,
+                    timestamp: new Date().toISOString()
+                };
+            },
+
+            saveAnalysis(analysisData) {
+                const history = JSON.parse(localStorage.getItem('emotion_history') || '[]');
+                history.unshift({
+                    id: Date.now(),
+                    ...analysisData,
+                    timestamp: new Date().toISOString()
+                });
+                
+                if (history.length > 50) {
+                    history.splice(50);
+                }
+                
+                localStorage.setItem('emotion_history', JSON.stringify(history));
+                return { success: true, id: Date.now() };
+            },
+
+            getAnalysisHistory() {
+                return JSON.parse(localStorage.getItem('emotion_history') || '[]');
+            },
+
+            getEmotionStats() {
+                const history = this.getAnalysisHistory();
+                if (history.length === 0) {
+                    return { totalSessions: 0, avgStress: 0, mostCommon: 'N/A', positiveRatio: 0 };
+                }
+
+                const emotionCounts = {};
+                let totalStress = 0;
+                let positiveCount = 0;
+
+                history.forEach(analysis => {
+                    emotionCounts[analysis.emotion] = (emotionCounts[analysis.emotion] || 0) + 1;
+                    
+                    const stressValue = this.getStressFromEmotion(analysis.emotion);
+                    totalStress += stressValue;
+
+                    if (['JOY', 'CALM', 'SURPRISE'].includes(analysis.emotion)) {
+                        positiveCount++;
+                    }
+                });
+
+                const mostCommonEmotion = Object.keys(emotionCounts).reduce((a, b) => 
+                    emotionCounts[a] > emotionCounts[b] ? a : b, 'CALM'
+                );
+
+                return {
+                    totalSessions: history.length,
+                    avgStress: Math.round(totalStress / history.length),
+                    mostCommon: mostCommonEmotion,
+                    positiveRatio: Math.round((positiveCount / history.length) * 100)
+                };
+            },
+
+            getStressFromEmotion(emotion) {
+                const stressMap = {
+                    'JOY': 15,
+                    'CALM': 20,
+                    'SURPRISE': 35,
+                    'CONFUSED': 50,
+                    'SADNESS': 65,
+                    'ANGER': 80
+                };
+                return stressMap[emotion] || 50;
+            }
+        };
+
+        // Global variables
+        let currentUser = null;
+        let analysisHistory = [];
+        let currentSessionId = 'session-' + Date.now();
+
+        // Meditation state
+        let meditationTimer = null;
+        let meditationTimeLeft = 300;
+        let isMeditationActive = false;
+
+        // Focus state
+        let focusTimer = null;
+        let focusTimeLeft = 1500;
+        let isFocusActive = false;
+        let focusSessionsCompleted = 0;
+        let totalFocusTime = 0;
+
+        // Stress interventions state
+        let currentStressLevel = 0;
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const enableCameraBtn = document.getElementById('enableCameraBtn');
+        const enableCameraText = document.getElementById('enableCameraText');
+        const videoElement = document.getElementById('videoElement');
+        const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+        const cameraContainer = document.getElementById('cameraContainer');
+        const cameraStatus = document.getElementById('cameraStatus');
+        const analysisIndicator = document.getElementById('analysisIndicator');
+        const emotionIndicator = document.getElementById('emotionIndicator');
+        const emotionText = document.getElementById('emotionText');
+        const confidenceBar = document.getElementById('confidenceBar');
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        const loginModal = document.getElementById('loginModal');
+        const demoLoginBtn = document.getElementById('demoLoginBtn');
+        const saveMetricsBtn = document.getElementById('saveMetricsBtn');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const historyList = document.getElementById('historyList');
+        const navItems = document.querySelectorAll('.nav-item');
+        const simulateEmotionBtn = document.getElementById('simulateEmotionBtn');
+
+        // Meditation elements
+        const meditationTimerDisplay = document.getElementById('meditationTimer');
+        const startMeditationBtn = document.getElementById('startMeditationBtn');
+        const stopMeditationBtn = document.getElementById('stopMeditationBtn');
+        const sessionCards = document.querySelectorAll('.session-card');
+
+        // Focus elements
+        const focusTimerDisplay = document.getElementById('focusTimer');
+        const startFocusBtn = document.getElementById('startFocusBtn');
+        const stopFocusBtn = document.getElementById('stopFocusBtn');
+        const focusModes = document.querySelectorAll('.focus-mode');
+        const focusSessionsDisplay = document.getElementById('focusSessions');
+        const focusTimeDisplay = document.getElementById('focusTime');
+
+        // Stress elements
+        const stressLevelDisplay = document.getElementById('stressLevel');
+        const stressDescription = document.getElementById('stressDescription');
+        const interventionCards = document.querySelectorAll('.intervention-card');
+
+        // AI Recommendations
+        const aiRecommendations = document.getElementById('aiRecommendations');
+
+        // State variables
+        let isDarkMode = false;
+        let isCameraActive = false;
+        let emotionAnalysisInterval;
+        let currentStream = null;
+        let currentSection = 'dashboard';
+        let canvas = null;
+        let context = null;
+
+        // Initialize canvas for image capture
+        function initCanvas() {
+            canvas = document.createElement('canvas');
+            context = canvas.getContext('2d');
+            canvas.width = 640;
+            canvas.height = 480;
+        }
+
+        // Enhanced Camera Management
+        async function startCamera() {
+            try {
+                showLoading(enableCameraBtn, 'Starting Camera...');
+                cameraStatus.textContent = 'Initializing Camera...';
+                analysisIndicator.style.display = 'flex';
+                
+                // Check if we already have a stream
+                if (currentStream) {
+                    stopCamera();
+                }
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'user',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        frameRate: { ideal: 30 }
+                    },
+                    audio: false
+                });
+                
+                currentStream = stream;
+                videoElement.srcObject = stream;
+                videoElement.classList.remove('hidden');
+                cameraPlaceholder.classList.add('hidden');
+                cameraContainer.classList.add('active');
+                
+                enableCameraText.textContent = 'Stop Camera';
+                enableCameraBtn.classList.remove('success');
+                enableCameraBtn.classList.add('danger');
+                enableCameraBtn.disabled = false;
+                isCameraActive = true;
+                cameraStatus.textContent = 'Camera Active - AI Ready';
+                
+                // Wait for video to be ready
+                videoElement.addEventListener('loadeddata', () => {
+                    startEmotionAnalysis();
+                }, { once: true });
+                
+                showNotification('Camera activated - AI analysis started', 'success');
+                
+            } catch (error) {
+                console.error('Camera error:', error);
+                showNotification('Camera access denied. Using simulation mode.', 'warning');
+                resetCameraButton();
+                cameraStatus.textContent = 'Using Simulation Mode';
+                analysisIndicator.style.display = 'none';
+            }
+        }
+
+        function stopCamera() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+            
+            videoElement.srcObject = null;
+            videoElement.classList.add('hidden');
+            cameraPlaceholder.classList.remove('hidden');
+            cameraContainer.classList.remove('active');
+            analysisIndicator.style.display = 'none';
+            
+            resetCameraButton();
+            isCameraActive = false;
+            cameraStatus.textContent = 'Camera Ready';
+            
+            if (emotionAnalysisInterval) {
+                clearInterval(emotionAnalysisInterval);
+            }
+            
+            showNotification('Camera stopped', 'info');
+        }
+
+        function toggleCamera() {
+            if (isCameraActive) {
+                stopCamera();
+            } else {
+                startCamera();
+            }
+        }
+
+        function resetCameraButton() {
+            enableCameraText.textContent = 'Start Camera';
+            enableCameraBtn.classList.remove('danger');
+            enableCameraBtn.classList.add('success');
+            enableCameraBtn.disabled = false;
+        }
+
+        function startEmotionAnalysis() {
+            if (emotionAnalysisInterval) {
+                clearInterval(emotionAnalysisInterval);
+            }
+            
+            emotionAnalysisInterval = setInterval(async () => {
+                if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA && isCameraActive) {
+                    // Draw video frame to canvas for analysis
+                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    
+                    try {
+                        cameraStatus.textContent = 'Analyzing Emotions...';
+                        // Convert canvas to base64 for backend
+                        const base64Image = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+                        const result = await emotionService.analyzeEmotion(base64Image);
+                        updateEmotionUI(result);
+                        updateMentalStateMetrics(result.emotion);
+                        generateAIInsights(result.emotion);
+                        
+                        // Save analysis every 20 seconds
+                        if (Date.now() % 20000 < 100) {
+                            saveCurrentAnalysis(result);
+                        }
+                    } catch (error) {
+                        console.error('Emotion analysis failed:', error);
+                        cameraStatus.textContent = 'Analysis Error - Retrying...';
+                    }
+                }
+            }, 4000); // Analyze every 4 seconds
+        }
+
+        function simulateEmotionAnalysis() {
+            const result = emotionService.mockAnalyzeEmotion();
+            updateEmotionUI(result);
+            updateMentalStateMetrics(result.emotion);
+            generateAIInsights(result.emotion);
+            saveCurrentAnalysis(result);
+            showNotification('Emotion analysis completed!', 'success');
+        }
+
+        // Enhanced UI Updates
+        function updateEmotionUI(analysis) {
+            emotionIndicator.innerHTML = `<i class="fas ${analysis.icon}"></i>`;
+            emotionIndicator.style.background = analysis.color;
+            emotionText.textContent = analysis.text;
+            
+            const confidencePercent = Math.round(analysis.confidence * 100);
+            confidenceBar.style.width = `${confidencePercent}%`;
+            
+            cameraStatus.textContent = `Detected: ${analysis.text}`;
+        }
+
+        function updateMentalStateMetrics(emotion) {
+            const stressValue = emotionService.getStressFromEmotion(emotion);
+            const focusValue = emotion === 'CALM' ? 85 : 100 - stressValue;
+            const energyValue = emotion === 'JOY' ? 90 : emotion === 'SADNESS' ? 35 : 65;
+
+            currentStressLevel = stressValue;
+            updateStressUI();
+
+            updateProgressBar('stress', stressValue);
+            updateProgressBar('focus', focusValue);
+            updateProgressBar('energy', energyValue);
+        }
+
+        function updateProgressBar(type, value) {
+            const bar = document.getElementById(`${type}Bar`);
+            const valueElement = document.getElementById(`${type}Value`);
+            if (bar && valueElement) {
+                bar.style.width = `${value}%`;
+                valueElement.textContent = `${value}%`;
+            }
+        }
+
+        // Meditation Functions
+        function initMeditation() {
+            startMeditationBtn.addEventListener('click', startMeditation);
+            stopMeditationBtn.addEventListener('click', stopMeditation);
+            
+            sessionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const duration = parseInt(this.getAttribute('data-duration'));
+                    setMeditationDuration(duration);
+                });
+            });
+        }
+
+        function setMeditationDuration(seconds) {
+            meditationTimeLeft = seconds;
+            updateMeditationTimerDisplay();
+        }
+
+        function startMeditation() {
+            if (isMeditationActive) return;
+            
+            isMeditationActive = true;
+            startMeditationBtn.disabled = true;
+            stopMeditationBtn.disabled = false;
+            
+            meditationTimer = setInterval(() => {
+                meditationTimeLeft--;
+                updateMeditationTimerDisplay();
+                
+                if (meditationTimeLeft <= 0) {
+                    completeMeditation();
+                }
+            }, 1000);
+            
+            showNotification('Meditation session started', 'success');
+        }
+
+        function stopMeditation() {
+            if (!isMeditationActive) return;
+            
+            isMeditationActive = false;
+            clearInterval(meditationTimer);
+            startMeditationBtn.disabled = false;
+            stopMeditationBtn.disabled = true;
+            
+            showNotification('Meditation session stopped', 'info');
+        }
+
+        function completeMeditation() {
+            stopMeditation();
+            showNotification('Meditation session completed!', 'success');
+            
+            if (currentStressLevel > 20) {
+                currentStressLevel = Math.max(0, currentStressLevel - 25);
+                updateStressUI();
+            }
+        }
+
+        function updateMeditationTimerDisplay() {
+            const minutes = Math.floor(meditationTimeLeft / 60);
+            const seconds = meditationTimeLeft % 60;
+            meditationTimerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Focus Functions
+        function initFocus() {
+            startFocusBtn.addEventListener('click', startFocus);
+            stopFocusBtn.addEventListener('click', stopFocus);
+            
+            focusModes.forEach(mode => {
+                mode.addEventListener('click', function() {
+                    focusModes.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const duration = parseInt(this.getAttribute('data-duration'));
+                    setFocusDuration(duration);
+                });
+            });
+            
+            const savedFocusStats = localStorage.getItem('focus_stats');
+            if (savedFocusStats) {
+                const stats = JSON.parse(savedFocusStats);
+                focusSessionsCompleted = stats.sessions || 0;
+                totalFocusTime = stats.time || 0;
+                updateFocusStats();
+            }
+        }
+
+        function setFocusDuration(seconds) {
+            focusTimeLeft = seconds;
+            updateFocusTimerDisplay();
+        }
+
+        function startFocus() {
+            if (isFocusActive) return;
+            
+            isFocusActive = true;
+            startFocusBtn.disabled = true;
+            stopFocusBtn.disabled = false;
+            
+            focusTimer = setInterval(() => {
+                focusTimeLeft--;
+                updateFocusTimerDisplay();
+                
+                if (focusTimeLeft <= 0) {
+                    completeFocusSession();
+                }
+            }, 1000);
+            
+            showNotification('Focus session started', 'success');
+        }
+
+        function stopFocus() {
+            if (!isFocusActive) return;
+            
+            isFocusActive = false;
+            clearInterval(focusTimer);
+            startFocusBtn.disabled = false;
+            stopFocusBtn.disabled = true;
+            
+            showNotification('Focus session stopped', 'info');
+        }
+
+        function completeFocusSession() {
+            stopFocus();
+            focusSessionsCompleted++;
+            
+            const activeMode = document.querySelector('.focus-mode.active');
+            const sessionDuration = parseInt(activeMode.getAttribute('data-duration'));
+            totalFocusTime += sessionDuration;
+            
+            updateFocusStats();
+            saveFocusStats();
+            
+            showNotification('Focus session completed!', 'success');
+            
+            updateProgressBar('focus', 85);
+        }
+
+        function updateFocusTimerDisplay() {
+            const minutes = Math.floor(focusTimeLeft / 60);
+            const seconds = focusTimeLeft % 60;
+            focusTimerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateFocusStats() {
+            focusSessionsDisplay.textContent = focusSessionsCompleted;
+            
+            const hours = Math.floor(totalFocusTime / 3600);
+            const minutes = Math.floor((totalFocusTime % 3600) / 60);
+            
+            if (hours > 0) {
+                focusTimeDisplay.textContent = `${hours}h ${minutes}m`;
+            } else {
+                focusTimeDisplay.textContent = `${minutes}m`;
+            }
+        }
+
+        function saveFocusStats() {
+            const stats = {
+                sessions: focusSessionsCompleted,
+                time: totalFocusTime
+            };
+            localStorage.setItem('focus_stats', JSON.stringify(stats));
+        }
+
+        // Stress Management Functions
+        function initStressManagement() {
+            interventionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const intervention = this.id;
+                    startStressIntervention(intervention);
+                });
+            });
+        }
+
+        function startStressIntervention(intervention) {
+            switch(intervention) {
+                case 'breathingExercise':
+                    showNotification('Starting 4-7-8 breathing exercise', 'success');
+                    startBreathingExercise();
+                    break;
+                case 'quickMeditation':
+                    showNotification('Starting 3-minute meditation', 'success');
+                    setMeditationDuration(180);
+                    startMeditation();
+                    break;
+                case 'groundingExercise':
+                    showNotification('Starting 5-4-3-2-1 grounding exercise', 'success');
+                    startGroundingExercise();
+                    break;
+                case 'progressiveRelaxation':
+                    showNotification('Starting progressive muscle relaxation', 'success');
+                    startProgressiveRelaxation();
+                    break;
+            }
+        }
+
+        function startBreathingExercise() {
+            showNotification('Breathe in for 4 seconds, hold for 7, exhale for 8', 'info');
+            
+            setTimeout(() => {
+                if (currentStressLevel > 10) {
+                    currentStressLevel = Math.max(0, currentStressLevel - 15);
+                    updateStressUI();
+                }
+            }, 30000);
+        }
+
+        function startGroundingExercise() {
+            const steps = [
+                "Notice 5 things you can see",
+                "Notice 4 things you can touch",
+                "Notice 3 things you can hear",
+                "Notice 2 things you can smell",
+                "Notice 1 thing you can taste"
+            ];
+            
+            let currentStep = 0;
+            const exerciseInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    showNotification(steps[currentStep], 'info');
+                    currentStep++;
+                } else {
+                    clearInterval(exerciseInterval);
+                    showNotification('Grounding exercise completed', 'success');
+                    
+                    if (currentStressLevel > 10) {
+                        currentStressLevel = Math.max(0, currentStressLevel - 20);
+                        updateStressUI();
+                    }
+                }
+            }, 10000);
+        }
+
+        function startProgressiveRelaxation() {
+            showNotification('Starting progressive muscle relaxation', 'info');
+            
+            setTimeout(() => {
+                if (currentStressLevel > 10) {
+                    currentStressLevel = Math.max(0, currentStressLevel - 25);
+                    updateStressUI();
+                }
+            }, 60000);
+        }
+
+        function updateStressUI() {
+            stressLevelDisplay.textContent = currentStressLevel;
+            
+            if (currentStressLevel < 30) {
+                stressDescription.textContent = 'Low stress - You\'re doing great!';
+            } else if (currentStressLevel < 60) {
+                stressDescription.textContent = 'Moderate stress - Try a quick intervention';
+            } else {
+                stressDescription.textContent = 'High stress - Recommended: breathing exercise';
+            }
+            
+            updateAIRecommendations();
+        }
+
+        // AI Recommendations
+        function updateAIRecommendations() {
+            aiRecommendations.innerHTML = '';
+            
+            if (currentStressLevel >= 60) {
+                aiRecommendations.innerHTML = `
+                    <div class="ai-recommendation high-stress">
+                        <div class="recommendation-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            High Stress Detected
+                        </div>
+                        <div class="recommendation-desc">
+                            Your stress level is high. Try the 4-7-8 breathing exercise or a quick meditation session to reduce stress.
+                        </div>
+                    </div>
+                `;
+            } else if (currentStressLevel >= 30) {
+                aiRecommendations.innerHTML = `
+                    <div class="ai-recommendation">
+                        <div class="recommendation-title">
+                            <i class="fas fa-brain"></i>
+                            Moderate Stress
+                        </div>
+                        <div class="recommendation-desc">
+                            You're experiencing moderate stress. A short meditation or grounding exercise could help restore balance.
+                        </div>
+                    </div>
+                `;
+            } else {
+                aiRecommendations.innerHTML = `
+                    <div class="ai-recommendation">
+                        <div class="recommendation-title">
+                            <i class="fas fa-smile"></i>
+                            Good Mental State
+                        </div>
+                        <div class="recommendation-desc">
+                            Your stress levels are low. Consider a focus session to boost productivity or a meditation to maintain balance.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            const focusValue = parseInt(document.getElementById('focusValue').textContent) || 0;
+            if (focusValue < 50) {
+                aiRecommendations.innerHTML += `
+                    <div class="ai-recommendation focus">
+                        <div class="recommendation-title">
+                            <i class="fas fa-bullseye"></i>
+                            Focus Boost Needed
+                        </div>
+                        <div class="recommendation-desc">
+                            Your focus level is low. Try a 25-minute focus session with the Pomodoro technique to improve concentration.
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function generateAIInsights(emotion) {
+            // This function is called to update AI insights based on emotion
+            updateAIRecommendations();
+        }
+
+        // Data Management
+        function loadAnalysisHistory() {
+            analysisHistory = emotionService.getAnalysisHistory();
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            historyList.innerHTML = '';
+            
+            if (analysisHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
+                        <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 8px; opacity: 0.5;"></i>
+                        <p>No analysis history yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            analysisHistory.slice(0, 10).forEach(analysis => {
+                const emotionConfig = {
+                    'JOY': { icon: 'fa-laugh', color: 'var(--warning)' },
+                    'SORROW': { icon: 'fa-sad-tear', color: 'var(--gray)' },
+                    'ANGER': { icon: 'fa-angry', color: 'var(--danger)' },
+                    'SURPRISE': { icon: 'fa-surprise', color: 'var(--primary)' },
+                    'SADNESS': { icon: 'fa-frown', color: 'var(--gray)' },
+                    'CONFUSED': { icon: 'fa-meh', color: 'var(--gray)' },
+                    'CALM': { icon: 'fa-smile', color: 'var(--success)' }
+                };
+                
+                const config = emotionConfig[analysis.emotion] || emotionConfig.CALM;
+                const time = new Date(analysis.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-emotion">
+                        <div class="emotion-badge" style="background: ${config.color};">
+                            <i class="fas ${config.icon}"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">${analysis.emotion.charAt(0).toUpperCase() + analysis.emotion.slice(1).toLowerCase()}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">${Math.round(analysis.confidence * 100)}% confidence</div>
+                        </div>
+                    </div>
+                    <div class="history-time">${time}</div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function saveCurrentAnalysis(analysis) {
+            emotionService.saveAnalysis(analysis);
+            loadAnalysisHistory();
+        }
+
+        // Authentication
+        function handleDemoLogin() {
+            currentUser = {
+                id: 'demo-user',
+                name: 'Demo User',
+                isDemo: true
+            };
+            
+            localStorage.setItem('emotion_user', JSON.stringify(currentUser));
+            
+            hideLoginModal();
+            showNotification('MindSync Ready! All features activated', 'success');
+            
+            loadAnalysisHistory();
+        }
+
+        function showLoginModal() {
+            loginModal.style.display = 'flex';
+        }
+
+        function hideLoginModal() {
+            loginModal.style.display = 'none';
+        }
+
+        // Theme Management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('emotion_theme');
+            isDarkMode = savedTheme === 'dark';
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            updateThemeIcon();
+        }
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            localStorage.setItem('emotion_theme', isDarkMode ? 'dark' : 'light');
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            icon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Navigation
+        function initNavigation() {
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    navigateToSection(section);
+                });
+            });
+            
+            document.getElementById('meditationFeature').addEventListener('click', () => navigateToSection('meditation'));
+            document.getElementById('focusFeature').addEventListener('click', () => navigateToSection('focus'));
+            document.getElementById('stressFeature').addEventListener('click', () => navigateToSection('stress'));
+            document.getElementById('historyFeature').addEventListener('click', () => navigateToSection('history'));
+        }
+
+        function navigateToSection(section) {
+            navItems.forEach(item => {
+                item.classList.toggle('active', item.getAttribute('data-section') === section);
+            });
+
+            const sections = {
+                dashboard: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+                meditation: () => document.getElementById('meditationSection').scrollIntoView({ behavior: 'smooth' }),
+                focus: () => document.getElementById('focusSection').scrollIntoView({ behavior: 'smooth' }),
+                stress: () => document.getElementById('stressSection').scrollIntoView({ behavior: 'smooth' }),
+                history: () => document.getElementById('historySection').scrollIntoView({ behavior: 'smooth' })
+            };
+
+            if (sections[section]) {
+                sections[section]();
+            }
+            currentSection = section;
+        }
+
+        // Enhanced notification system
+        function showNotification(message, type = 'info') {
+            const existingNotifications = document.querySelectorAll('.notification-toast');
+            existingNotifications.forEach(notification => notification.remove());
+
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-${getNotificationIcon(type)}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                success: 'check-circle',
+                error: 'exclamation-triangle',
+                warning: 'exclamation-circle',
+                info: 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        // Utility Functions
+        function showLoading(button, text) {
+            button.disabled = true;
+            button.innerHTML = `<div class="loading-spinner"></div> ${text}`;
+        }
+
+        // Initialize App
+        function initApp() {
+            initTheme();
+            initNavigation();
+            initCanvas();
+            initMeditation();
+            initFocus();
+            initStressManagement();
+            generateAIInsights('CALM');
+
+            // Event listeners
+            themeToggle.addEventListener('click', toggleTheme);
+            enableCameraBtn.addEventListener('click', toggleCamera);
+            getStartedBtn.addEventListener('click', showLoginModal);
+            demoLoginBtn.addEventListener('click', handleDemoLogin);
+            saveMetricsBtn.addEventListener('click', handleSaveMetrics);
+            clearHistoryBtn.addEventListener('click', handleClearHistory);
+            simulateEmotionBtn.addEventListener('click', simulateEmotionAnalysis);
+
+            // Check authentication
+            const savedUser = localStorage.getItem('emotion_user');
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                currentSessionId = 'session-' + Date.now();
+                loadAnalysisHistory();
+                showNotification('Welcome back! MindSync is ready.', 'success');
+            } else {
+                setTimeout(showLoginModal, 1000);
+            }
+        }
+
+        function handleSaveMetrics() {
+            const stress = parseInt(document.getElementById('stressValue').textContent);
+            
+            if (isNaN(stress)) {
+                showNotification('Start emotion analysis first', 'error');
+                return;
+            }
+
+            const emotion = emotionText.textContent.split(' ')[0].toUpperCase();
+            const analysisData = {
+                emotion: emotion,
+                confidence: parseFloat(confidenceBar.style.width) / 100 || 0.85,
+                metrics: {
+                    stress: stress,
+                    focus: parseInt(document.getElementById('focusValue').textContent),
+                    energy: parseInt(document.getElementById('energyValue').textContent)
+                },
+                sessionId: currentSessionId
+            };
+
+            saveCurrentAnalysis(analysisData);
+            showNotification('Analysis saved successfully!', 'success');
+        }
+
+        function handleClearHistory() {
+            if (confirm('Are you sure you want to clear all analysis history?')) {
+                localStorage.removeItem('emotion_history');
+                analysisHistory = [];
+                updateHistoryDisplay();
+                showNotification('History cleared', 'info');
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Prevent drag and drop for better mobile experience
+        document.addEventListener('dragstart', e => e.preventDefault());
+    </script>
+</body>
+</html>
