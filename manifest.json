@@ -1,0 +1,118 @@
+{
+  "short_name": "Emotion Analyzer",
+  "name": "Emotion Analyzer - AI Mental Wellness Analyzer",
+  "description": "Real-time emotion detection, meditation, and stress management powered by AI and Google Vision API",
+  "icons": [
+    {
+      "src": "icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#4F46E5",
+  "background_color": "#FFFFFF",
+  "orientation": "portrait-primary",
+  "categories": ["health", "lifestyle", "productivity", "medical"],
+  "screenshots": [
+    {
+      "src": "screenshots/mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Emotion Analysis Dashboard"
+    },
+    {
+      "src": "screenshots/mobile-2.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Meditation & Stress Management"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Emotion Analysis",
+      "short_name": "Analyze",
+      "description": "Start real-time emotion detection",
+      "url": "/?source=analyze",
+      "icons": [
+        {
+          "src": "icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Quick Meditation",
+      "short_name": "Meditate",
+      "description": "Start a 5-minute meditation session",
+      "url": "/?source=meditate",
+      "icons": [
+        {
+          "src": "icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Focus Session",
+      "short_name": "Focus",
+      "description": "Start a 25-minute focus session",
+      "url": "/?source=focus",
+      "icons": [
+        {
+          "src": "icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
