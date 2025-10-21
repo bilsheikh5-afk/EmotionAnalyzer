@@ -1552,7 +1552,7 @@
     <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <h2>Welcome to MindSync</h2>
+            <h2>Welcome to Emotion Analyzer</h2>
             <p>AI-powered mental wellness with real-time emotion detection</p>
             <button class="action-button" id="demoLoginBtn" style="width: 100%;">
                 <i class="fas fa-play"></i> Start Analysis
@@ -2476,7 +2476,7 @@
                 currentUser = JSON.parse(savedUser);
                 currentSessionId = 'session-' + Date.now();
                 loadAnalysisHistory();
-                showNotification('Welcome back! MindSync is ready.', 'success');
+                showNotification('Welcome back! Emotion Analyzer is ready.', 'success');
             } else {
                 setTimeout(showLoginModal, 1000);
             }
