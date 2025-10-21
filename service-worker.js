@@ -1,6 +1,6 @@
-// Service Worker for MindSync - AI Mental Wellness App
-const CACHE_NAME = 'mindsync-v2.2.0';
-const API_CACHE_NAME = 'mindsync-api-v1';
+// Service Worker for Emotion Analyzer - AI Mental Wellness App
+const CACHE_NAME = 'Emotion Analyzer-v2.2.0';
+const API_CACHE_NAME = 'Emotion Analyzer-api-v1';
 
 // URLs to cache during installation
 const urlsToCache = [
